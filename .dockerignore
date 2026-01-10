@@ -20,6 +20,7 @@ docker-compose.yml
 tmp/
 dist/
 .cache/
+/data
 
 # OS specific files
 .DS_Store
