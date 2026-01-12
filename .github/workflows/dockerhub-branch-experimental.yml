@@ -18,12 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-<<<<<<< HEAD
-        uses: actions/checkout@v4
-=======
         uses: actions/checkout@v6
-
->>>>>>> 20e42198b6a9b1ca8928a2efec1e0594a35f477a
       - name: Verify Secrets
         run: |
           if [ -z "${{ secrets.DOCKER_HUB_USERNAME }}" ]; then echo "Missing Username"; exit 1; fi
@@ -47,12 +42,7 @@ jobs:
     
     steps:
       - name: Checkout code
-<<<<<<< HEAD
-        uses: actions/checkout@v4
-=======
         uses: actions/checkout@v6
-
->>>>>>> 20e42198b6a9b1ca8928a2efec1e0594a35f477a
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to Docker Hub
