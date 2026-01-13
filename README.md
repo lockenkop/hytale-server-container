@@ -1,4 +1,4 @@
-> **[WARNING]** Still waiting on Hytale to release more information about the server binary. The docker image is therefore under development.
+> **[WARNING]** this docker image is not ready as of yet. please wait 12 hours after hytale release for a working version. :) enjoy the game!
 
 <div align="center" width="100%">
 
