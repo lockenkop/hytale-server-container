@@ -42,6 +42,7 @@ docker run -d \
   -e TZ="Europe/Amsterdam" \
   -p 5520:5520/udp \
   -v "hytale-server:/home/container" \
+  -v "/etc/machine-id:/etc/machine-id:ro:" \
   --restart unless-stopped \
   -t -i \
   deinfreu/hytale-server:experimental
@@ -65,6 +66,7 @@ services:
       - "5520:5520/udp"
     volumes:
       - ./data:/home/container
+      - /etc/machine-id:/etc/machine-id:ro
     tty: true
     stdin_open: true
 ```
