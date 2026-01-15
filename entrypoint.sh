@@ -46,13 +46,13 @@ if [ "$DEBUG" = "TRUE" ]; then
     sh "$SCRIPTS_PATH/checks/security.sh"
     sh "$SCRIPTS_PATH/checks/network.sh"
 else
-    printf "%sSystem debug skipped (DEBUG=FALSE)%s\n" "$DIM" "$NC"
+    echo -e "${DIM}System debug skipped (DEBUG=FALSE)${NC}"
 fi
 
 if [ "$PROD" = "TRUE" ]; then
     sh "$SCRIPTS_PATH/checks/prod.sh"
 else
-    printf "%sProduction audit skipped (PROD=FALSE)%s\n" "$DIM" "$NC"
+    echo -e "${DIM}Production audit skipped (PROD=FALSE)${NC}"
 fi
 
 ARCH=$(uname -m)
