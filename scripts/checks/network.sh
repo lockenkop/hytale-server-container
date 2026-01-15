@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -u
 
 # Load dependencies
 . "$SCRIPTS_PATH/utils.sh"
