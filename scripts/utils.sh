@@ -36,11 +36,19 @@ log_step() {
 }
 
 log_success() {
-    printf "[ ${GREEN}OK${NC} ] %b\n" "${SYM_OK}"
+    if [ "${NO_COLOR:-FALSE}" = "TRUE" ]; then
+        printf "[ OK ]\n"
+    else
+        printf "[ ${GREEN}OK${NC} ] %b\n" "${SYM_OK}"
+    fi
 }
 
 log_warning() {
-    printf "[ ${YELLOW}WARN${NC} ] %b\n" "${SYM_WARN}"
+    if [ "${NO_COLOR:-FALSE}" = "TRUE" ]; then
+        printf "[ WARN ]\n"
+    else
+        printf "[ ${YELLOW}WARN${NC} ] %b\n" "${SYM_WARN}"
+    fi
     printf "      ${YELLOW}↳ Note:${NC}  %s\n" "${1:-}"
     if [ -n "${2:-}" ]; then
         printf "      ${DIM}↳ Suggestion: %s${NC}\n" "${2}"
@@ -48,7 +56,11 @@ log_warning() {
 }
 
 log_error() {
-    printf "[ ${RED}FAIL${NC} ] %b\n" "${SYM_FAIL}"
+    if [ "${NO_COLOR:-FALSE}" = "TRUE" ]; then
+        printf "[ FAIL ]\n"
+    else
+        printf "[ ${RED}FAIL${NC} ] %b\n" "${SYM_FAIL}"
+    fi
     printf "      ${RED}↳ Error:${NC} %s\n" "${1:-}"
     if [ -n "${2:-}" ]; then
         printf "      ${DIM}↳ Hint:   %s${NC}\n" "${2}"

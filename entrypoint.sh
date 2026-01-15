@@ -1,6 +1,10 @@
 #!/bin/sh
 set -eu
 
+# Force line buffering for TrueNAS Scale log compatibility
+export PYTHONUNBUFFERED=1
+stdbuf -oL -eL true 2>/dev/null && USE_STDBUF=true || USE_STDBUF=false
+
 # --- Configuration defaults ---
 export SCRIPTS_PATH="/usr/local/bin/scripts"
 export SERVER_PORT="${SERVER_PORT:-5520}"
