@@ -19,7 +19,6 @@ The Hytale server container is highly configurable through environment variables
 | `SERVER_IP`                   | The IP address the server binds to                                                                      | `0.0.0.0`  |
 | `PROD`                        | Set to `TRUE` to run production readiness audits                                                        | `FALSE`    |
 | `JAVA_ARGS`                   | Additional flags for the JVM (expert use only)                                                          | `(Empty)`  |
-| `CACHE`                       | Enables the Ahead-Of-Time cache                                                                         | `FALSE`    |
 
 ---
 
