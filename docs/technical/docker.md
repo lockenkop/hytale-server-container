@@ -11,20 +11,60 @@ The Hytale server container is highly configurable through environment variables
 
 ## ⚙️ Core Server Settings
 
-| Variable                     | Description                                                                 | Default   |
-|------------------------------|-----------------------------------------------------------------------------|-----------|
-| `TZ`                         | The [Timezone identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for server logs | `UTC`     |
-| `DEBUG`                      | Set to `TRUE` to enable diagnostic scripts and verbose logging               | `FALSE`   |
-| `SERVER_PORT`                | The primary UDP port for game traffic                                        | `5520`    |
-| `SERVER_IP`                  | The IP address the server binds to                                            | `0.0.0.0` |
-| `PROD`                       | Set to `TRUE` to run production readiness audits                             | `FALSE`   |
-| `JAVA_ARGS`                  | Additional flags for the JVM (expert use only)                               | `(Empty)` |
-| `CACHE`                      | Enables the Ahead-Of-Time cache                                              | `FALSE`   |
-| `HYTALE_ACCEPT_EARLY_PLUGINS`| Allow loading early or experimental plugins                                  | `FALSE`   |
-| `HYTALE_ALLOW_OP`            | Automatically grant operator permissions                                     | `FALSE`   |
-| `HYTALE_AUTH_MODE`           | Enable authenticated (online) mode                                           | `FALSE`   |
-| `HYTALE_BACKUP`              | Enable automatic backups                                                     | `FALSE`   |
-| `HYTALE_BACKUP_FREQUENCY`    | Frequency of automatic backups                                               | `(Empty)` |
+| Variable                      | Description                                                                                             | Default    |
+|-------------------------------|---------------------------------------------------------------------------------------------------------|------------|
+| `TZ`                          | The [Timezone identifier](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for server logs | `UTC`      |
+| `DEBUG`                       | Set to `TRUE` to enable diagnostic scripts and verbose logging                                          | `FALSE`    |
+| `SERVER_PORT`                 | The primary UDP port for game traffic                                                                   | `5520`     |
+| `SERVER_IP`                   | The IP address the server binds to                                                                      | `0.0.0.0`  |
+| `PROD`                        | Set to `TRUE` to run production readiness audits                                                        | `FALSE`    |
+| `JAVA_ARGS`                   | Additional flags for the JVM (expert use only)                                                          | `(Empty)`  |
+| `CACHE`                       | Enables the Ahead-Of-Time cache                                                                         | `FALSE`    |
+
+---
+
+## 🎮 Hytale Server Options
+
+Options are listed in the same order as they appear in `java -jar HytaleServer.jar --help`.
+
+| Variable                          | Description                                                                                                                                                             | Default     |
+|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| `HYTALE_ACCEPT_EARLY_PLUGINS`     | Allow loading early or experimental plugins (unsupported and may cause stability issues)                                                                                | `FALSE`     |
+| `HYTALE_ALLOW_OP`                 | Automatically grant operator permissions                                                                                                                                | `FALSE`     |
+| `HYTALE_AUTH_MODE`                | Authentication mode: `authenticated`, `offline`, or `insecure`. `authenticated` is the built-in default.                                                                | `(Empty)`   |
+| `HYTALE_BACKUP`                   | Create a backup on server startup (requires `HYTALE_BACKUP_DIR` to be set)                                                                                              | `FALSE`     |
+| `HYTALE_BACKUP_DIR`               | Directory where backups are stored. Setting this enables the `/backup` command in-game. The default `./backups` adds a `backups` directory to your mounted data folder. | `./backups` |
+| `HYTALE_BACKUP_FREQUENCY`         | Frequency of scheduled backups in minutes                                                                                                                               | `(Empty)`   |
+| `HYTALE_BACKUP_MAX_COUNT`         | Maximum number of backups to keep                                                                                                                                       | `(Empty)`   |
+| `HYTALE_BARE`                     | Runs server bare (without loading worlds, binding to ports or creating directories)                                                                                     | `FALSE`     |
+| `HYTALE_BOOT_COMMAND`             | Command to run on boot (multiple commands execute synchronously in order)                                                                                               | `(Empty)`   |
+| `HYTALE_CLIENT_PID`               | Client process ID (for integrated server scenarios)                                                                                                                     | `(Empty)`   |
+| `HYTALE_DISABLE_ASSET_COMPARE`    | Disable asset comparison checks                                                                                                                                         | `FALSE`     |
+| `HYTALE_DISABLE_CPB_BUILD`        | Disable building of compact prefab buffers                                                                                                                              | `FALSE`     |
+| `HYTALE_DISABLE_FILE_WATCHER`     | Disable file watcher                                                                                                                                                    | `FALSE`     |
+| `HYTALE_DISABLE_SENTRY`           | Disable Sentry error reporting                                                                                                                                          | `FALSE`     |
+| `HYTALE_EARLY_PLUGINS`            | Additional early plugin directories to load from (Path)                                                                                                                 | `(Empty)`   |
+| `HYTALE_EVENT_DEBUG`              | Enable event debugging                                                                                                                                                  | `FALSE`     |
+| `HYTALE_FORCE_NETWORK_FLUSH`      | Force network flush behavior                                                                                                                                            | `true`      |
+| `HYTALE_GENERATE_SCHEMA`          | Generate schema, save to assets directory and exit                                                                                                                      | `FALSE`     |
+| `HYTALE_IDENTITY_TOKEN`           | Identity token (JWT)                                                                                                                                                    | `(Empty)`   |
+| `HYTALE_LOG`                      | Sets logger level (KeyValueHolder format)                                                                                                                               | `(Empty)`   |
+| `HYTALE_MIGRATE_WORLDS`           | Worlds to migrate (comma-separated)                                                                                                                                     | `(Empty)`   |
+| `HYTALE_MIGRATIONS`               | The migrations to run (JSON object)                                                                                                                                     | `(Empty)`   |
+| `HYTALE_MODS`                     | Additional mods directories (Path)                                                                                                                                      | `(Empty)`   |
+| `HYTALE_OWNER_NAME`               | Server owner name                                                                                                                                                       | `(Empty)`   |
+| `HYTALE_OWNER_UUID`               | Server owner UUID                                                                                                                                                       | `(Empty)`   |
+| `HYTALE_PREFAB_CACHE`             | Prefab cache directory for immutable assets                                                                                                                             | `(Empty)`   |
+| `HYTALE_SESSION_TOKEN`            | Session token for Session Service API                                                                                                                                   | `(Empty)`   |
+| `HYTALE_SHUTDOWN_AFTER_VALIDATE`  | Automatically shutdown after asset and/or prefab validation                                                                                                             | `FALSE`     |
+| `HYTALE_SINGLEPLAYER`             | Run server in singleplayer mode                                                                                                                                         | `FALSE`     |
+| `HYTALE_TRANSPORT`                | Transport type: `QUIC` or other supported types. `QUIC` is the built-in default.                                                                                        | `(Empty)`   |
+| `HYTALE_UNIVERSE`                 | Universe directory path                                                                                                                                                 | `(Empty)`   |
+| `HYTALE_VALIDATE_ASSETS`          | Exit with error if any assets are invalid                                                                                                                               | `FALSE`     |
+| `HYTALE_VALIDATE_PREFABS`         | Validation option for prefabs (exits with error if invalid)                                                                                                             | `(Empty)`   |
+| `HYTALE_VALIDATE_WORLD_GEN`       | Exit with error if default world gen is invalid                                                                                                                         | `FALSE`     |
+| `HYTALE_VERSION`                  | Print version information and exit                                                                                                                                      | `FALSE`     |
+| `HYTALE_WORLD_GEN`                | World generation directory path                                                                                                                                         | `(Empty)`   |
 
 ---
 
