@@ -43,7 +43,7 @@ ENV USER=container \
 
 # 1. Install Runtime Dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    tini iproute2 ca-certificates tzdata jq p7zip-full && \
+    tini curl iproute2 ca-certificates tzdata jq p7zip-full && \
     rm -rf /var/lib/apt/lists/*
 
 # 2. Add Gosu
