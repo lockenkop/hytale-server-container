@@ -81,7 +81,7 @@ apply_env() {
 }
 
 # Main Configuration Logic
-log_section "Config Management"
+log_section "Server Configuration Management"
 
 # Step 1: Ensure configuration file exists
 if [ ! -f "$CONFIG_FILE" ]; then
@@ -101,7 +101,7 @@ else
     log_success
 fi
 
-# Step 2: Apply environment variable overrides
+# Step 2: Apply environment variable overrides and display configuration
 log_step "Applying environment overrides"
 
 apply_env ".ServerName"               "${HYTALE_SERVER_NAME:-}"
@@ -114,3 +114,53 @@ apply_env ".Defaults.World"           "${HYTALE_WORLD:-}"
 apply_env ".Defaults.GameMode"        "${HYTALE_GAMEMODE:-}"
 
 log_success
+
+# Step 3: Display current configuration
+printf "\n"
+log_step "Config Version"
+CONFIG_VERSION=$(jq -r '.Version' "$CONFIG_FILE" 2>/dev/null || echo "3")
+printf "${CYAN}%s${NC}\n" "$CONFIG_VERSION"
+
+log_step "Server Name"
+SERVER_NAME=$(jq -r '.ServerName' "$CONFIG_FILE" 2>/dev/null || echo "Hytale Server")
+printf "${GREEN}%s${NC}\n" "$SERVER_NAME"
+
+log_step "MOTD"
+MOTD=$(jq -r '.MOTD' "$CONFIG_FILE" 2>/dev/null || echo "")
+if [ -n "$MOTD" ]; then
+    printf "${GREEN}%s${NC}\n" "$MOTD"
+else
+    printf "${DIM}not set${NC}\n"
+fi
+
+log_step "Password Protection"
+PASSWORD=$(jq -r '.Password' "$CONFIG_FILE" 2>/dev/null || echo "")
+if [ -n "$PASSWORD" ]; then
+    printf "${GREEN}enabled${NC} (hidden)\n"
+else
+    printf "${DIM}disabled${NC}\n"
+fi
+
+log_step "Max Players"
+MAX_PLAYERS=$(jq -r '.MaxPlayers' "$CONFIG_FILE" 2>/dev/null || echo "100")
+printf "${GREEN}%s${NC}\n" "$MAX_PLAYERS"
+
+log_step "Max View Radius"
+MAX_VIEW=$(jq -r '.MaxViewRadius' "$CONFIG_FILE" 2>/dev/null || echo "32")
+printf "${GREEN}%s${NC} chunks\n" "$MAX_VIEW"
+
+log_step "Local Compression"
+COMPRESSION=$(jq -r '.LocalCompressionEnabled' "$CONFIG_FILE" 2>/dev/null || echo "false")
+if [ "$COMPRESSION" = "true" ]; then
+    printf "${GREEN}enabled${NC}\n"
+else
+    printf "${DIM}disabled${NC}\n"
+fi
+
+log_step "Default World"
+WORLD=$(jq -r '.Defaults.World' "$CONFIG_FILE" 2>/dev/null || echo "default")
+printf "${GREEN}%s${NC}\n" "$WORLD"
+
+log_step "Default Game Mode"
+GAMEMODE=$(jq -r '.Defaults.GameMode' "$CONFIG_FILE" 2>/dev/null || echo "Adventure")
+printf "${GREEN}%s${NC}\n" "$GAMEMODE"
