@@ -8,7 +8,7 @@ WORKDIR /build
 
 # Download and extract Hytale Downloader
 RUN curl -L -o hytale.zip https://downloader.hytale.com/hytale-downloader.zip && \
-    7z x hytale.zip -y -o./hytale && \
+    7z x hytale.zip -y -o./hytale -mmt=on && \
     mv ./hytale/hytale-downloader-linux-amd64 ./hytale-downloader && \
     chmod +x ./hytale-downloader && rm -rf hytale hytale.zip
 
@@ -42,13 +42,30 @@ LABEL org.opencontainers.image.title="Hytale Server" \
     org.opencontainers.image.licenses="Apache-2.0"
 
 # Runtime configuration
-ENV USER=container HOME=/home/container UID=1000 GID=1000 \
-    SCRIPTS_PATH="/usr/local/bin/scripts" SERVER_PORT=5520 SERVER_IP="" \
-    JAVA_ARGS="" PROD=FALSE DEBUG=FALSE
+ENV USER=container \
+    HOME=/home/container \
+    UID=1000 \
+    GID=1000 \
+    SCRIPTS_PATH="/usr/local/bin/scripts" \
+    SERVER_PORT=5520 \
+    SERVER_IP="" \
+    JAVA_ARGS="" \
+    PROD=FALSE \
+    DEBUG=FALSE
 
-# Install dependencies & create user
-RUN apk add --no-cache tini su-exec curl iproute2 ca-certificates tzdata jq libc6-compat libstdc++ gcompat 7zip && \
-    addgroup -S -g ${GID} ${USER} && adduser -S -D -h ${HOME} -u ${UID} -G ${USER} ${USER}
+# Install dependencies
+RUN apk add --no-cache tini su-exec curl iproute2 ca-certificates tzdata jq libc6-compat libstdc++ gcompat 7zip
+
+# Setup User (with UID/GID conflict handling)
+RUN if getent passwd ${UID} > /dev/null 2>&1; then \
+        EXISTING_USER=$(getent passwd ${UID} | cut -d: -f1); \
+        deluser ${EXISTING_USER} && \
+        addgroup -S -g ${GID} ${USER} && \
+        adduser -S -D -h ${HOME} -u ${UID} -G ${USER} ${USER}; \
+    else \
+        addgroup -S -g ${GID} ${USER} && \
+        adduser -S -D -h ${HOME} -u ${UID} -G ${USER} ${USER}; \
+    fi
 
 # Copy artifacts from builder
 COPY --from=builder --chown=root:root /build/hytale-downloader /usr/local/bin/hytale-downloader
@@ -56,12 +73,11 @@ COPY --from=builder --chown=${USER}:${USER} /build/scripts/ /usr/local/bin/scrip
 COPY --from=builder --chown=${USER}:${USER} /build/entrypoint.sh /entrypoint.sh
 
 # Image metadata file
-RUN printf "buildtime=%s\nversion=%s\nrevision=%s\n" "${BUILDTIME}" "${VERSION}" "${REVISION}" > /etc/image.properties && \
-    chown ${USER}:${USER} /etc/image.properties
+RUN printf "buildtime=%s\nversion=%s\nrevision=%s\n" "${BUILDTIME}" "${VERSION}" "${REVISION}" > /etc/image.properties
 
 # Final setup
 WORKDIR ${HOME}
-USER root
+USER ${USER}
 EXPOSE ${SERVER_PORT}/udp
 STOPSIGNAL SIGTERM
 HEALTHCHECK --interval=30s --timeout=5s --start-period=2m --retries=3 CMD ss -ulpn | grep -q ":${SERVER_PORT}" || exit 1
