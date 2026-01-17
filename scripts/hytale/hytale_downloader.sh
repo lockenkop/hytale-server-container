@@ -72,5 +72,5 @@ else
     # Server already installed, no updates
     log_success
     printf "      ${DIM}↳ Info:${NC} Server up-to-date. Skipping extraction.\n"
-    printf "      ${DIM}↳ Note:${NC} Place YYYY.MM.DD*.zip in data folder to trigger update.\n"
+    printf "      ${DIM}↳ Note:${NC} Place YYYY.MM.DD*.zip in /home/container to trigger update.\n"
 fi
